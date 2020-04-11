@@ -11,29 +11,34 @@
  *   filtering the available workspaces.
  **************************************************/
 
-/* SaveAvailWorkspaces - Builds an array of all available workspaces
- *               and saves it as "availWorkspaces" in sessionStorage
+/* SaveAvailWorkspaces - gets availWorkspaces from db then
+ *                       saves them to sessionStorage
  */
-const SaveAvailWorkspaces = () => {
-  //retrieve properties
-  const properties = JSON.parse(localStorage.getItem("properties"));
-  let availProps = properties.filter((e) => e.listed);
-  let availWork = [];
-  availProps.forEach((prop) => {
-    prop.workspace.forEach((work) => {
-      if (work.listed) {
-        work.address = prop.address;
-        work.neighbor = prop.neighbor;
-        work.sqFeet = prop.sqFeet;
-        work.parking = prop.parking;
-        work.transit = prop.transit;
-        work.owner = prop.owner;
-        availWork.push(work);
-      }
-    });
-  });
-  sessionStorage.setItem("availWorkspaces", JSON.stringify(availWork));
-  sessionStorage.setItem("displayWorkspaces", JSON.stringify(availWork));
+const SaveAvailWorkspaces = async () => {
+  //retrieve availWorkspaces
+  const sessId = sessionStorage.getItem("sessId");
+  const fetchRes = await getFetch(`/api/availWorkspaces/${sessId}`);
+  if (!fetchRes.success) {
+    if (fetchRes.msg == "expiredSess") document.location = "/expired";
+    console.log(fetchRes.msg);
+  } else {
+    //update sessId
+    sessionStorage.setItem("sessId", fetchRes.newSessId);
+    //check if availWorkspaces array is empty
+    if (!fetchRes.availWorks.length) {
+      document.querySelector(
+        "#noWorkspaces"
+      ).innerHTML = `I'm sorry but there are no available Workspaces right now.`;
+    }
+  }
+  sessionStorage.setItem(
+    "availWorkspaces",
+    JSON.stringify(fetchRes.availWorks)
+  );
+  sessionStorage.setItem(
+    "displayWorkspaces",
+    JSON.stringify(fetchRes.availWorks)
+  );
 };
 
 /* PopulateWorkTable - shows all workspaces within the dataset in a table
@@ -49,59 +54,8 @@ const PopulateWorkTable = (dataset) => {
             <br/> There also may not be any Workspaces available.`;
   }
 
-  const table = document.querySelector("#availWorkTable");
-  let body =
-    //table headers
-    `<tbody>
-              <tr>
-                  <th>
-                      Address<button onclick="Sort('address', 'asc');">&uarr;</button
-                      ><button onclick="Sort('address', 'des');">&darr;</button>
-                  </th>
-                  <th>
-                      Neighborhood<button onclick="Sort('neighbor', 'asc');">&uarr;</button
-                      ><button onclick="Sort('neighbor', 'des');">&darr;</button>
-                  </th>
-                  <th>
-                      Type<button onclick="Sort('type', 'asc');">&uarr;</button
-                      ><button onclick="Sort('type', 'des');">&darr;</button>
-                  </th>
-                  <th>
-                      Occupancy<button onclick="Sort('occ', 'asc');">&uarr;</button
-                      ><button onclick="Sort('occ', 'des');">&darr;</button>
-                  </th>
-                  <th>
-                      SqFeet<button onclick="Sort('sqFeet', 'asc');">&uarr;</button
-                      ><button onclick="Sort('sqFeet', 'des');">&darr;</button>
-                  </th>
-                  <th>
-                      Term<button onclick="Sort('term', 'asc');">&uarr;</button
-                      ><button onclick="Sort('term', 'des');">&darr;</button>
-                  </th>
-                  <th>
-                      Price<button onclick="Sort('price', 'asc');">&uarr;</button
-                      ><button onclick="Sort('price', 'des');">&darr;</button>
-                  </th>
-                  <th>
-                      Available Date<button onclick="Sort('availDate', 'asc');">&uarr;</button
-                      ><button onclick="Sort('availDate', 'des');">&darr;</button>
-                  </th>
-                  <th>
-                      Parking Garage<button onclick="Sort('parking', 'asc');">&uarr;</button
-                      ><button onclick="Sort('parking', 'des');">&darr;</button>
-                  </th>
-                  <th>
-                      Smoking<button onclick="Sort('smoke', 'asc');">&uarr;</button
-                      ><button onclick="Sort('smoke', 'des');">&darr;</button>
-                  </th>
-                  <th>
-                      Transit<button onclick="Sort('transit', 'asc');">&uarr;</button
-                      ><button onclick="Sort('transit', 'des');">&darr;</button>
-                  </th>
-                  <th>Contact</th>
-              </tr>
-          </tbody>`;
-
+  const table = document.querySelector("#insertWorks");
+  let result = "";
   workspaces.forEach((workspace) => {
     const address = workspace.address;
     const neighbor = workspace.neighbor;
@@ -114,7 +68,7 @@ const PopulateWorkTable = (dataset) => {
     const parking = workspace.parking;
     const smoke = workspace.smoke;
     const transit = workspace.transit;
-    const owner = workspace.owner;
+    const owner = workspace.userId;
 
     if (type === "meet") type = "Meeting Room";
     if (type === "office") type = "Private Office";
@@ -124,32 +78,30 @@ const PopulateWorkTable = (dataset) => {
     if (term === "week") term = "Week";
     if (term === "month") term = "Month";
 
-    body += `<tbody>
-                      <tr>
-                          <td>${address}</td>
-                          <td>${neighbor}</td>
-                          <td>${type}</td>
-                          <td>${occ}</td>
-                          <td>${sqFeet}</td>
-                          <td>${term}</td>
-                          <td>$${price}</td>
-                          <td>${availDate}</td>
-                          <td>${parking ? "Yes" : "No"}</td>
-                          <td>${smoke ? "Yes" : "No"}</td>
-                          <td>${transit ? "Yes" : "No"}</td>
-                          <td><button id="${owner}" onclick="ShowOwnerInfo(this.id);">View</button></td>
-                      </tr>
-                  </tbody>`;
+    result += `<tr>
+                    <td>${address}</td>
+                    <td>${neighbor}</td>
+                    <td>${type}</td>
+                    <td>${occ}</td>
+                    <td>${sqFeet}</td>
+                    <td>${term}</td>
+                    <td>$${Number.parseFloat(price).toFixed(2)}</td>
+                    <td>${availDate.slice(0, 10)}</td>
+                    <td>${parking ? "Yes" : "No"}</td>
+                    <td>${smoke ? "Yes" : "No"}</td>
+                    <td>${transit ? "Yes" : "No"}</td>
+                    <td><button id="${owner}" onclick="ShowOwnerInfo(this.id);">View</button></td>
+                </tr>`;
   });
-  table.innerHTML = body;
+  table.innerHTML = result;
 };
 
 /* FirstLoadWorkTable - run on load of coworkerShow, sets availWorkspaces
  *                      then populates the table
  */
-const FirstLoadWorkTable = () => {
+const FirstLoadWorkTable = async () => {
   //
-  SaveAvailWorkspaces();
+  await SaveAvailWorkspaces();
   PopulateWorkTable("availWorkspaces");
 };
 
@@ -378,18 +330,23 @@ const Sort = (sortBy, order) => {
 /* ShowOwnerInfo - Displays the owner contact info in a popUp
  *
  */
-const ShowOwnerInfo = (email) => {
+const ShowOwnerInfo = async (userId) => {
   document.querySelector("#popUp").classList.remove("popUpHide");
   const popUpMsg = document.querySelector("#popMsg");
-  const users = JSON.parse(localStorage.getItem("users"));
-  let owner;
-  users.forEach((user) => {
-    if (user.email === email) owner = user;
-  });
-  let info = `Owner: ${owner.fName} ${owner.lName}\n
-                  Phone: ${owner.phone}\n
-                  Email: ${owner.email}`;
-  popUpMsg.innerText = info;
+  const sessId = sessionStorage.getItem("sessId");
+  const fetchRes = await getFetch(`/api/user/${userId}/${sessId}`);
+  if (!fetchRes.success) {
+    if (fetchRes.msg == "expiredSess") document.location = "/expired";
+    console.log(fetchRes.msg);
+  } else {
+    //update sessId
+    sessionStorage.setItem("sessId", fetchRes.newSessId);
+    const user = fetchRes.user[0];
+    const info = `Owner: ${user.firstName} ${user.lastName}\n
+                  Phone: ${user.phone}\n
+                  Email: ${user.email}`;
+    popUpMsg.innerText = info;
+  }
 };
 
 //call formListener from general.js

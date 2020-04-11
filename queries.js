@@ -71,11 +71,15 @@ module.exports.updateSess = (oldSessId, newSessId, lastSessTime) => {
 
 /** selectUserNameType - Query that selects user first name and type Where email*/
 module.exports.selectUserNameType = (email) => {
-  return `SELECT firstName, type FROM Users WHERE email LIKE '${email}'`;
+  return `SELECT firstName, type FROM Users WHERE email LIKE '${email}';`;
 };
 
 module.exports.sessTimeDiff = (now, sessId) => {
-  return `SELECT DATEDIFF(ss, (SELECT lastSessTime FROM Login WHERE sessId LIKE '${sessId}'), '${now}') AS diff`;
+  return `SELECT DATEDIFF(ss, (SELECT lastSessTime FROM Login WHERE sessId LIKE '${sessId}'), '${now}') AS diff;`;
+};
+
+module.exports.selectUser = (userId) => {
+  return `SELECT * FROM Users WHERE userId = ${userId};`;
 };
 
 /***********************************************
@@ -188,3 +192,6 @@ module.exports.deleteWork = (workId) => {
 };
 
 // availWorkspaces
+module.exports.selectAvailWorks = () => {
+  return `SELECT * FROM AvailWorkspaces;`;
+};

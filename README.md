@@ -10,6 +10,8 @@ Instillation:
 
 This application requires Node.js and Microsoft SQL Server
 
+---!!!---- The database scripts have recently been updated. ----!!!---
+
 Please run the SQL scripts in the 'dbInstall' folder on your MSSQL server.
 Configure application setting in 'config.js' in the root folder.
 Run app.js in the root folder

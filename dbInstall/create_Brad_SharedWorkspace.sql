@@ -91,7 +91,7 @@ GO
 --A view that shows all available workspaces and key details for a Coworker search
 CREATE VIEW AvailWorkspaces
 AS
-SELECT workId, w.propId, address, neighbor, sqFeet, parking, transit, occ, smoke, availDate, term, price
+SELECT workId, w.propId, userId, address, neighbor, type, sqFeet, parking, transit, occ, smoke, availDate, term, price
 FROM Workspaces AS w JOIN Properties AS p
 	ON w.propId = p.propId
 WHERE w.listed = 1 AND p.listed = 1;

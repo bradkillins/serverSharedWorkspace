@@ -48,7 +48,59 @@
             </div>
         </form>
         <div class="tableContainer">
-            <table id="availWorkTable"></table>
+            <table id="availWorkTable">
+                <tbody>
+                    <tr>
+                        <!-- cSpell: disable -->
+                        <th>
+                            Address<button onclick="Sort('address', 'asc');">&uarr;</button><button
+                                onclick="Sort('address', 'des');">&darr;</button>
+                        </th>
+                        <th>
+                            Neighborhood<button onclick="Sort('neighbor', 'asc');">&uarr;</button><button
+                                onclick="Sort('neighbor', 'des');">&darr;</button>
+                        </th>
+                        <th>
+                            Type<button onclick="Sort('type', 'asc');">&uarr;</button><button
+                                onclick="Sort('type', 'des');">&darr;</button>
+                        </th>
+                        <th>
+                            Occupancy<button onclick="Sort('occ', 'asc');">&uarr;</button><button
+                                onclick="Sort('occ', 'des');">&darr;</button>
+                        </th>
+                        <th>
+                            SqFeet<button onclick="Sort('sqFeet', 'asc');">&uarr;</button><button
+                                onclick="Sort('sqFeet', 'des');">&darr;</button>
+                        </th>
+                        <th>
+                            Term<button onclick="Sort('term', 'asc');">&uarr;</button><button
+                                onclick="Sort('term', 'des');">&darr;</button>
+                        </th>
+                        <th>
+                            Price<button onclick="Sort('price', 'asc');">&uarr;</button><button
+                                onclick="Sort('price', 'des');">&darr;</button>
+                        </th>
+                        <th>
+                            Available Date<button onclick="Sort('availDate', 'asc');">&uarr;</button><button
+                                onclick="Sort('availDate', 'des');">&darr;</button>
+                        </th>
+                        <th>
+                            Parking Garage<button onclick="Sort('parking', 'asc');">&uarr;</button><button
+                                onclick="Sort('parking', 'des');">&darr;</button>
+                        </th>
+                        <th>
+                            Smoking<button onclick="Sort('smoke', 'asc');">&uarr;</button><button
+                                onclick="Sort('smoke', 'des');">&darr;</button>
+                        </th>
+                        <th>
+                            Transit<button onclick="Sort('transit', 'asc');">&uarr;</button><button
+                                onclick="Sort('transit', 'des');">&darr;</button>
+                        </th>
+                        <th>Contact</th>
+                    </tr>
+                </tbody>
+                <tbody id="insertWorks"></tbody>
+            </table>
             <div id="noWorkspaces"></div>
         </div>
     </div>

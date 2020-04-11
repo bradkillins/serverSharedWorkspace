@@ -28,11 +28,11 @@ const CreateNewProperty = async () => {
   };
 
   const fetchRes = await postFetch("/api/property/new", newProp);
-  //update sessId
-  const newSessId = fetchRes.newSessId;
-  sessionStorage.setItem("sessId", newSessId);
 
   if (fetchRes.success) {
+    //update sessId
+    const newSessId = fetchRes.newSessId;
+    sessionStorage.setItem("sessId", newSessId);
     //provide feedback to user
     document.querySelector(".formFeedback").innerHTML = `${fetchRes.msg}`;
     document.querySelector("#addProperty").reset();
@@ -57,14 +57,14 @@ const ShowProperties = async () => {
   const sessId = sessionStorage.getItem("sessId");
   const userName = sessionStorage.getItem("userName");
   const fetchRes = await getFetch(`/api/properties/${sessId}`);
-  //update sessId
-  const newSessId = fetchRes.newSessId;
-  sessionStorage.setItem("sessId", newSessId);
 
   if (!fetchRes.success) {
     if (fetchRes.msg == "expiredSess") document.location = "/expired";
     console.log(fetchRes.msg);
   } else {
+    //update sessId
+    const newSessId = fetchRes.newSessId;
+    sessionStorage.setItem("sessId", newSessId);
     //check if properties array is empty
     if (!fetchRes.properties.length) {
       document.querySelector(
@@ -160,11 +160,11 @@ const EditProp = async () => {
   };
 
   const fetchRes = await putFetch("/api/property", updatedProp);
-  //update sessId
-  const newSessId = fetchRes.newSessId;
-  sessionStorage.setItem("sessId", newSessId);
 
   if (fetchRes.success) {
+    //update sessId
+    const newSessId = fetchRes.newSessId;
+    sessionStorage.setItem("sessId", newSessId);
     //provide feedback to user
     document.querySelector(".formFeedback").innerHTML = `${fetchRes.msg}`;
     setTimeout(() => {
@@ -199,11 +199,12 @@ const DeleteProp = async () => {
   const propId = sessionStorage.getItem("propId");
   //delete Prop
   const fetchRes = await deleteFetch(`/api/property/${propId}/${sessId}`);
-  //update sessId
-  const newSessId = fetchRes.newSessId;
-  sessionStorage.setItem("sessId", newSessId);
+
   ClosePopup();
   if (fetchRes.success) {
+    //update sessId
+    const newSessId = fetchRes.newSessId;
+    sessionStorage.setItem("sessId", newSessId);
     //provide feedback to user
     document.querySelector(".formFeedback").innerHTML = `${fetchRes.msg}`;
     setTimeout(() => {

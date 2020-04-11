@@ -163,6 +163,7 @@ router.get("/expired", (req, res) => {
  *  GET:    //api/workspaces/:propId/:sessId - gets all workspaces tied to a certain property
  *  GET:    //api/workspace/:workId          - gets a workspace by workId
  *  GET:    //api/availWorkspaces/:sessId    - gets all available workspaces
+ *  GET:    //api/user/:userId/:sessId       - get a user by userId
  *  PUT:    //api/property                   - edit property with propId in req.body
  *  PUT:    //api/workspace                  - edit workspace with workId in req.body
  *  DELETE: //api/property/:propId/:sessId   - delete a property with id
@@ -183,7 +184,8 @@ router.get("/api/properties/:sessId", urlParser, get.userProperties);
 router.get("/api/property/:propId", urlParser, get.property);
 router.get("/api/workspaces/:propId/:sessId", urlParser, get.propWorkspaces);
 router.get("/api/workspace/:workId", urlParser, get.workspace);
-//router.get("/api/availWorkspaces/:sessId", urlParser, get.availWorkspaces);
+router.get("/api/availWorkspaces/:sessId", urlParser, get.availWorkspaces);
+router.get("/api/user/:userId/:sessId", urlParser, get.user);
 
 const put = require("./apis/put");
 
