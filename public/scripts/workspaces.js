@@ -1,15 +1,15 @@
 /*************************************************
-          Shared Workspace: Phase 2
-          
-          Final Project
-          By Bradley Killins
-          SODV1201
-
-          Client-side Script: workspaces.js
-
-    All Workspace related functions for creating,
-    saving, editing, and displaying workspaces.
-**************************************************/
+ *         Shared Workspace: Phase 2
+ *
+ *         Final Project
+ *         By Bradley Killins
+ *         SODV1201
+ *
+ *         Client-side Script: workspaces.js
+ *
+ *   All Workspace related functions for creating,
+ *   saving, editing, and displaying workspaces.
+ **************************************************/
 
 /* CreateNewWorkspace - creates a new workspace and saves it to the db
  */

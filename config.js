@@ -1,3 +1,14 @@
+/*************************************************
+ *         Shared Workspace: Phase 2
+ *
+ *         Final Project
+ *         By Bradley Killins
+ *         SODV1201
+ *
+ *         Application config
+ *
+ **************************************************/
+
 //Node Server settings:
 
 module.exports.port = 5080; //Enter desired port for application server

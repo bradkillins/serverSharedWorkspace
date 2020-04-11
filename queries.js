@@ -1,4 +1,14 @@
-//this is where all db queries will live
+/***********************************************
+ *         Shared Workspace: Phase 2
+ *
+ *         Final Project
+ *         By Bradley Killins
+ *         SODV1201
+ *
+ *         Database Queries and functions.
+ *
+ ***********************************************/
+
 //import Database connection:
 const db = require("./db");
 
@@ -18,10 +28,12 @@ module.exports.queryDb = async (query) => {
   }
 };
 
-//users, login, and session
+/***********************************************
+ *     Queries for Users and Login/Signup
+ *
+ ***********************************************/
 
 /** insertNewUser - Query to insert new User.
- *
  */
 module.exports.insertNewUser = (
   email,
@@ -39,7 +51,9 @@ module.exports.insertNewUser = (
     ((SELECT userId FROM Users WHERE email LIKE '${email}'), '${email}', '${password}', NULL, NULL);`;
 };
 
-/** updateFirstSess - Query to Update the Login Table with sess details on login*/
+/** updateFirstSess - Query to Update the Login Table with
+ *                    sess details for the first time
+ */
 module.exports.updateFirstSess = (email, sessId, lastSessTime) => {
   return `UPDATE Login
   SET sessId = '${sessId}',
@@ -64,7 +78,10 @@ module.exports.sessTimeDiff = (now, sessId) => {
   return `SELECT DATEDIFF(ss, (SELECT lastSessTime FROM Login WHERE sessId LIKE '${sessId}'), '${now}') AS diff`;
 };
 
-//properties
+/***********************************************
+ *     Queries for Properties
+ *
+ ***********************************************/
 
 /** selectUserProperties - gets all properties from associated user with sessId */
 module.exports.selectUserProperties = (sessId) => {
@@ -117,7 +134,10 @@ module.exports.deleteProp = (propId) => {
   return `DELETE Properties WHERE propId = ${propId};`;
 };
 
-//Workspaces
+/***********************************************
+ *     Queries for Workspaces
+ *
+ ***********************************************/
 
 /** insertNewWork - adds a new workspace to the workspaces table */
 module.exports.insertNewWork = (
@@ -166,3 +186,5 @@ module.exports.updateWork = (
 module.exports.deleteWork = (workId) => {
   return `DELETE Workspaces WHERE workId = ${workId};`;
 };
+
+// availWorkspaces

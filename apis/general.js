@@ -1,3 +1,14 @@
+/*************************************************
+ *         Shared Workspace: Phase 2
+ *
+ *         Final Project
+ *         By Bradley Killins
+ *         SODV1201
+ *
+ *         General functions used by other APIs
+ *
+ **************************************************/
+
 const q = require("../queries");
 
 /** GenRanId - a pseudo random alpha-numeric character generator

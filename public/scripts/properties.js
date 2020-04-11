@@ -1,15 +1,15 @@
 /**************************************************
-          Shared Workspace: Phase 2
-          
-          Final Project
-          By Bradley Killins
-          SODV1201
-
-          Client-side Script: properties.js
-
-    All Property related functions for creating,
-    saving, editing, and displaying properties. 
-***************************************************/
+ *         Shared Workspace: Phase 2
+ *
+ *         Final Project
+ *         By Bradley Killins
+ *         SODV1201
+ *
+ *         Client-side Script: properties.js
+ *
+ *   All Property related functions for creating,
+ *   saving, editing, and displaying properties.
+ ***************************************************/
 
 /* CreateNewProperty - instantiates a new property object and saves it to the
  *                     properties array in local storage, and to currentProperty

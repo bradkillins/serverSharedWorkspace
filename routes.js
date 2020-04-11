@@ -1,17 +1,26 @@
-/***********************
- *   Routes
- **********************/
+/***********************************************
+ *         Shared Workspace: Phase 2
+ *
+ *         Final Project
+ *         By Bradley Killins
+ *         SODV1201
+ *
+ *         Routes
+ *
+ ***********************************************/
 
 const express = require("express");
 const bodyParser = require("body-parser");
 const urlParser = bodyParser.urlencoded({ extended: false });
 const jsonParser = bodyParser.json();
 
-const router = express.Router(); //this holds all routes and is exported
+const router = express.Router(); //this holds routes object and is exported
 
-/************************
+/******************************************
  *    View Routes
- ************************/
+ *
+ *    All Routes that respond with html
+ ******************************************/
 
 //home
 router.get("/", (req, res) => {
@@ -143,21 +152,21 @@ router.get("/expired", (req, res) => {
 });
 
 /************************************************************************************************
- *              API Routes
+ *           API Routes
  *
  *  POST:   //api/user/new                   - create new user
  *  POST:   //api/login                      - validates user login and creates session
  *  POST:   //api/property/new               - create new property
  *  POST:   //api/workspace/new              - create new workspace
- *  PUT:    //api/property                   - edit property with propId in req.body
- *  PUT:    //api/workspace                  - edit workspace with workId in req.body
- *  DELETE: //api/property/:propId           - delete a property with id
- *  DELETE: //api/workspace/:workId          - delete a workspace with id
  *  GET:    //api/properties/:sessId         - gets all properties of a certain user
  *  GET:    //api/property/:propId           - gets a property by propId
  *  GET:    //api/workspaces/:propId/:sessId - gets all workspaces tied to a certain property
  *  GET:    //api/workspace/:workId          - gets a workspace by workId
  *  GET:    //api/availWorkspaces/:sessId    - gets all available workspaces
+ *  PUT:    //api/property                   - edit property with propId in req.body
+ *  PUT:    //api/workspace                  - edit workspace with workId in req.body
+ *  DELETE: //api/property/:propId/:sessId   - delete a property with id
+ *  DELETE: //api/workspace/:workId/:sessId  - delete a workspace with id
  *
  *************************************************************************************************/
 
@@ -174,6 +183,7 @@ router.get("/api/properties/:sessId", urlParser, get.userProperties);
 router.get("/api/property/:propId", urlParser, get.property);
 router.get("/api/workspaces/:propId/:sessId", urlParser, get.propWorkspaces);
 router.get("/api/workspace/:workId", urlParser, get.workspace);
+//router.get("/api/availWorkspaces/:sessId", urlParser, get.availWorkspaces);
 
 const put = require("./apis/put");
 

@@ -1,3 +1,14 @@
+/*************************************************
+ *         Shared Workspace: Phase 2
+ *
+ *         Final Project
+ *         By Bradley Killins
+ *         SODV1201
+ *
+ *         PUT API functions
+ *
+ **************************************************/
+
 const q = require("../queries");
 const gen = require("./general");
 
