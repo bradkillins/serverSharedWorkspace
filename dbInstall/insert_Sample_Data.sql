@@ -18,9 +18,9 @@ INSERT INTO Login
 VALUES
 	(1, 'brad@killins.com', '123456789', NULL, NULL),
 	(2, 'john@smith.com', '987654321', NULL, NULL),
-	(3, 'jen@tan.com', 'cats123', NULL, NULL),
-	(4, 'tom@garder.com', '555-123-7654', NULL, NULL),
-	(5, 'claire@gill.com', '888-999-1234', NULL, NULL);
+	(3, 'jen@tan.com', 'cats1234', NULL, NULL),
+	(4, 'tom@garder.com', 'abcd1234', NULL, NULL),
+	(5, 'claire@gill.com', '4321dcba', NULL, NULL);
 
 INSERT INTO Properties
 VALUES

@@ -18,6 +18,23 @@ module.exports.newUser = async (req, res) => {
   //check if user already exists in DB
   if (currentUsers.findIndex((user) => user.email == req.body.email) != -1) {
     res.send({ success: false, msg: "User already exists." });
+  } else if (
+    !req.body.email ||
+    !req.body.firstName ||
+    !req.body.lastName ||
+    !req.body.phone ||
+    !req.body.type ||
+    !req.body.password
+  ) {
+    res.send({
+      success: false,
+      msg: "Please enter all information in the form. Try again."
+    });
+  } else if (req.body.password.length < 8) {
+    res.send({
+      success: false,
+      msg: "Password must be 8 or more characters. Try again."
+    });
   } else {
     const dbRes = await q.queryDb(
       q.insertNewUser(
@@ -88,7 +105,19 @@ module.exports.newProp = async (req, res) => {
     res.send({ success: false, msg: "expiredSess" });
   }
   //valid session
-  else {
+  else if (
+    !req.body.address ||
+    !req.body.neighbor ||
+    !req.body.sqFeet ||
+    !req.body.parking ||
+    !req.body.transit ||
+    !req.body.listed
+  ) {
+    res.send({
+      success: false,
+      msg: "Please enter all information in the form. Try again."
+    });
+  } else {
     //update sessId
     const newSessId = gen.GenRanId(64);
     await q.queryDb(
@@ -115,7 +144,7 @@ module.exports.newProp = async (req, res) => {
     } else {
       res.send({
         success: false,
-        msg: "Unexpected response from the Database",
+        msg: `Please <a href="/contact">contact</a> the site admin. Database error.`,
         newSessId: newSessId
       });
     }
@@ -129,6 +158,20 @@ module.exports.newWork = async (req, res) => {
   const valid = await gen.validSess(sessId);
   if (!valid) {
     res.send({ success: false, msg: "expiredSess" });
+    //check if all fields filled in
+  } else if (
+    !req.body.type ||
+    !req.body.occ ||
+    !req.body.availDate ||
+    !req.body.term ||
+    !req.body.price ||
+    !req.body.smoke ||
+    !req.body.listed
+  ) {
+    res.send({
+      success: false,
+      msg: "Please enter all information in the form. Try again."
+    });
   }
   //valid session
   else {

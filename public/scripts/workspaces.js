@@ -46,9 +46,7 @@ const CreateNewWorkspace = async () => {
     }, 5000);
   } else {
     if (fetchRes.msg == "expiredSess") document.location = "/expired";
-    document.querySelector(".formFeedback").innerHTML = `${fetchRes.msg}<br/>
-    Please <a href="/contact">contact</a> the site admin if this keeps happening.`;
-    document.querySelector("#addWorkspace").reset();
+    document.querySelector(".formFeedback").innerHTML = fetchRes.msg;
     setTimeout(() => {
       document.querySelector(".formFeedback").innerHTML = "";
     }, 10000);
@@ -179,15 +177,13 @@ const EditCurrentWork = async () => {
     const newSessId = fetchRes.newSessId;
     sessionStorage.setItem("sessId", newSessId);
     //provide feedback to user
-    document.querySelector(".formFeedback").innerHTML = `${fetchRes.msg}`;
+    document.querySelector(".formFeedback").innerHTML = fetchRes.msg;
     setTimeout(() => {
       document.location = "/showPropWorkspaces";
     }, 1000);
   } else {
     if (fetchRes.msg == "expiredSess") document.location = "/expired";
-    document.querySelector(".formFeedback").innerHTML = `${fetchRes.msg}<br/>
-    Please <a href="/contact">contact</a> the site admin if this keeps happening.`;
-    document.querySelector("#editWorkspace").reset();
+    document.querySelector(".formFeedback").innerHTML = fetchRes.msg;
     setTimeout(() => {
       document.querySelector(".formFeedback").innerHTML = "";
     }, 10000);

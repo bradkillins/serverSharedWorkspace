@@ -37,7 +37,7 @@ const CreateNewUser = async () => {
   } //unsuccessful signup:
   else {
     document.querySelector(".formFeedback").innerHTML = `${fetchResult.msg}<br/>
-    Please try again, or <a href='/login'>login</a> if you already have an account.`;
+    Try <a href='/login'>logging in</a> if you already have an account.`;
     document.querySelector("#signup").reset();
   }
 };

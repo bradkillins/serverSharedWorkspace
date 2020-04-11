@@ -19,6 +19,18 @@ module.exports.property = async (req, res) => {
   const valid = await gen.validSess(sessId);
   if (!valid) {
     res.send({ success: false, msg: "expiredSess" });
+  } else if (
+    !req.body.address ||
+    !req.body.neighbor ||
+    !req.body.sqFeet ||
+    !req.body.parking ||
+    !req.body.transit ||
+    !req.body.listed
+  ) {
+    res.send({
+      success: false,
+      msg: "Please enter all information in the form. Try again."
+    });
   }
   //valid session
   else {
@@ -48,7 +60,7 @@ module.exports.property = async (req, res) => {
     } else {
       res.send({
         success: false,
-        msg: "Unexpected response from the Database",
+        msg: `Please <a href="/contact">contact</a> the site admin. Database error.`,
         newSessId: newSessId
       });
     }
@@ -64,7 +76,21 @@ module.exports.workspace = async (req, res) => {
     res.send({ success: false, msg: "expiredSess" });
   }
   //valid session
-  else {
+  //check if all fields filled in
+  else if (
+    !req.body.type ||
+    !req.body.occ ||
+    !req.body.availDate ||
+    !req.body.term ||
+    !req.body.price ||
+    !req.body.smoke ||
+    !req.body.listed
+  ) {
+    res.send({
+      success: false,
+      msg: "Please enter all information in the form. Try again."
+    });
+  } else {
     //update sessId
     const newSessId = gen.GenRanId(64);
     await q.queryDb(
@@ -93,7 +119,7 @@ module.exports.workspace = async (req, res) => {
     } else {
       res.send({
         success: false,
-        msg: "Unexpected response from the Database",
+        msg: `Please <a href="/contact">contact</a> the site admin. Database error.`,
         newSessId: newSessId
       });
     }

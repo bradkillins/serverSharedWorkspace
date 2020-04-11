@@ -41,12 +41,10 @@ const CreateNewProperty = async () => {
     }, 5000);
   } else {
     if (fetchRes.msg == "expiredSess") document.location = "/expired";
-    document.querySelector(".formFeedback").innerHTML = `${fetchRes.msg}<br/>
-    Please <a href="/contact">contact</a> the site admin if this keeps happening.`;
-    document.querySelector("#addProperty").reset();
+    document.querySelector(".formFeedback").innerHTML = fetchRes.msg;
     setTimeout(() => {
       document.querySelector(".formFeedback").innerHTML = "";
-    }, 10000);
+    }, 12000);
   }
 };
 
@@ -172,9 +170,7 @@ const EditProp = async () => {
     }, 1000);
   } else {
     if (fetchRes.msg == "expiredSess") document.location = "/expired";
-    document.querySelector(".formFeedback").innerHTML = `${fetchRes.msg}<br/>
-    Please <a href="/contact">contact</a> the site admin if this keeps happening.`;
-    document.querySelector("#editProperty").reset();
+    document.querySelector(".formFeedback").innerHTML = fetchRes.msg;
     setTimeout(() => {
       document.querySelector(".formFeedback").innerHTML = "";
     }, 10000);

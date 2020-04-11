@@ -31,3 +31,8 @@ Coworkers
 - Can view a table of available workspaces that have been marked listed.
 - Can sort or filter by any column in the table.
 - Can view owner details for any workspace in table.
+
+The following logins can be used for testing:
+
+- Owner: john@smith.com - Pass: 987654321
+- Coworker: jen@tan.com - Pass: cats1234
