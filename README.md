@@ -22,12 +22,12 @@ There are two user types:
 
 Owners
 
-Can view their own properties/workspaces
-Can create new properties/workspaces
-Can edit or delete their own properties/workspaces
+- Can view their own properties/workspaces
+- Can create new properties/workspaces
+- Can edit or delete their own properties/workspaces
 
 Coworkers
 
-Can view a table of available workspaces that have been marked listed.
-Can sort or filter by any column in the table.
-Can view owner details for any workspace in table.
+- Can view a table of available workspaces that have been marked listed.
+- Can sort or filter by any column in the table.
+- Can view owner details for any workspace in table.
