@@ -1,0 +1,64 @@
+<div class="popUp popUpHide" id="popUp">
+    <div class="popClose" onclick="ClosePopup();">
+        <div>X</div>
+    </div>
+    <div id="popMsg">
+        <p>Loading</p>
+    </div>
+</div>
+<header>
+    <div class="head-title"><a href="/">Share a Workspace</a></div>
+    <div class="userNameDisplay">
+        <div>Hello <span id="displayUserName"></span></div>
+        <div><a href="/">Log Out</a></div>
+    </div>
+</header>
+<main>
+    <div class="splash"></div>
+    <div class="content">
+        <a href="/showProp">Back to Properties</a>
+        <h1>Edit Property Info</h1>
+        <div class="formContainer">
+            <form id="editProperty">
+                <div class="formLine">
+                    <label for="address">Address: </label>
+                    <input type="text" id="address" name="address" required maxlength="100" />
+                </div>
+                <div class="formLine">
+                    <label for="neighborhood">Neighborhood: </label>
+                    <input type="text" id="neighborhood" name="neighborhood" required maxlength="100" />
+                </div>
+                <div class="formLine">
+                    <label for="sqFeet">Square Feet: </label>
+                    <input type="number" id="sqFeet" name="sqFeet" required min="0" />
+                </div>
+                <div class="formLine">
+                    Parking Garage:
+                    <label for="parkingYes">Yes
+                        <input type="radio" class="radio" id="parkingYes" name="parking" /></label>
+                    <label for="parkingNo">No
+                        <input type="radio" class="radio" id="parkingNo" name="parking" /></label>
+                </div>
+                <div class="formLine">
+                    Transit Access:
+                    <label for="transitYes">Yes
+                        <input type="radio" class="radio" id="transitYes" name="transit" /></label>
+                    <label for="transitNo">No
+                        <input type="radio" class="radio" id="transitNo" name="transit" /></label>
+                </div>
+                <div class="formLine">
+                    List this Property:
+                    <label for="listYes">Yes <input type="radio" class="radio" id="listYes" name="list" /></label>
+                    <label for="listNo">No <input type="radio" class="radio" id="listNo" name="list" /></label>
+                </div>
+                <div class="formSubmitLine">
+                    <button type="submit" class="btn">Update</button>
+                    <button type="button" onclick="ConfirmDeleteProp();" class="btnRed">
+                        Delete
+                    </button>
+                </div>
+            </form>
+            <div class="formFeedback"></div>
+        </div>
+    </div>
+</main>
