@@ -2,11 +2,7 @@
     <div class="popClose" onclick="ClosePopup();">
         <div>X</div>
     </div>
-    <div id="popMsg">
-        Owner Name: Bob Smith <br />
-        Phone: 403-234-1234<br />
-        Email: bob@smith.com
-    </div>
+    <div id="popMsg">Loading</div>
 </div>
 <header>
     <div class="head-title"><a href="/">Share a Workspace</a></div>
@@ -20,88 +16,64 @@
     <div class="content">
         <a href="/coworkerMenu">Back to Main Menu</a>
         <h1>Available Workspaces</h1>
-        <form id="filterForm">
-            <div>
-                <label for="filterBy">Filter By: </label>
-                <select name="filterBy" id="filterBy" onchange="InsertFilterInput();">
-                    <option value="none" selected>none...</option>
-                    <option value="address">Address</option>
-                    <option value="neighbor">Neighborhood</option>
-                    <option value="type">Type</option>
-                    <option value="occ">Occupancy</option>
-                    <option value="sqFeet">Sq Feet</option>
-                    <option value="term">Term</option>
-                    <option value="availDate">Available Date</option>
-                    <option value="parking">Parking Garage</option>
-                    <option value="smoke">Smoking</option>
-                    <option value="transit">Transit</option>
-                </select>
-            </div>
-            <div class="formLine">
-                <div id="filterTermInput">
-                    <label for="filterTerm">Filter Term: </label>
-                    <input type="text" id="filterTerm" disabled />
+        <div class="flexCon">
+            <form id="filterForm">
+                <div class="formLine">
+                    <div>
+                        <label for="filterBy">Filter By: </label>
+                        <select name="filterBy" id="filterBy" onchange="InsertFilterInput();">
+                            <option value="none" selected>none...</option>
+                            <option value="price">Price</option>
+                            <option value="address">Address</option>
+                            <option value="neighbor">Neighborhood</option>
+                            <option value="type">Type</option>
+                            <option value="occ">Occupancy</option>
+                            <option value="sqFeet">Sq Feet</option>
+                            <option value="term">Term</option>
+                            <option value="availDate">Available Date</option>
+                            <option value="parking">Parking Garage</option>
+                            <option value="smoke">Smoking</option>
+                            <option value="transit">Transit</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="formLine">
+                    <div id="filterTermInput">
+                        <label for="filterTerm">Filter Term: </label>
+                        <input type="text" id="filterTerm" disabled />
+                    </div>
+                </div>
+                <div class="formLine">
+                    <button type="submit">Apply Filter</button>
+                </div>
+            </form>
+            <div id="sortForm">
+                <div class="formLine">
+                    <div>
+                        <label for="sortBy">Sort By: </label>
+                        <select name="sortBy" id="sortBy">
+                            <option value="none" selected>none...</option>
+                            <option value="price">Price</option>
+                            <option value="address">Address</option>
+                            <option value="neighbor">Neighborhood</option>
+                            <option value="type">Type</option>
+                            <option value="occ">Occupancy</option>
+                            <option value="sqFeet">Sq Feet</option>
+                            <option value="term">Term</option>
+                            <option value="availDate">Available Date</option>
+                            <option value="parking">Parking Garage</option>
+                            <option value="smoke">Smoking</option>
+                            <option value="transit">Transit</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="formSubmitLine">
+                    <button class="btn" onclick="Sort('asc');">Sort Ascending</button>
+                    <button class="btn" onclick="Sort('desc');">Sort Descending</button>
                 </div>
             </div>
-            <div class="formLine">
-                <button type="submit">Apply Filter</button>
-            </div>
-        </form>
-        <div class="tableContainer">
-            <table id="availWorkTable">
-                <tbody>
-                    <tr>
-                        <!-- cSpell: disable -->
-                        <th>
-                            Address<button onclick="Sort('address', 'asc');">&uarr;</button><button
-                                onclick="Sort('address', 'des');">&darr;</button>
-                        </th>
-                        <th>
-                            Neighborhood<button onclick="Sort('neighbor', 'asc');">&uarr;</button><button
-                                onclick="Sort('neighbor', 'des');">&darr;</button>
-                        </th>
-                        <th>
-                            Type<button onclick="Sort('type', 'asc');">&uarr;</button><button
-                                onclick="Sort('type', 'des');">&darr;</button>
-                        </th>
-                        <th>
-                            Occupancy<button onclick="Sort('occ', 'asc');">&uarr;</button><button
-                                onclick="Sort('occ', 'des');">&darr;</button>
-                        </th>
-                        <th>
-                            SqFeet<button onclick="Sort('sqFeet', 'asc');">&uarr;</button><button
-                                onclick="Sort('sqFeet', 'des');">&darr;</button>
-                        </th>
-                        <th>
-                            Term<button onclick="Sort('term', 'asc');">&uarr;</button><button
-                                onclick="Sort('term', 'des');">&darr;</button>
-                        </th>
-                        <th>
-                            Price<button onclick="Sort('price', 'asc');">&uarr;</button><button
-                                onclick="Sort('price', 'des');">&darr;</button>
-                        </th>
-                        <th>
-                            Available Date<button onclick="Sort('availDate', 'asc');">&uarr;</button><button
-                                onclick="Sort('availDate', 'des');">&darr;</button>
-                        </th>
-                        <th>
-                            Parking Garage<button onclick="Sort('parking', 'asc');">&uarr;</button><button
-                                onclick="Sort('parking', 'des');">&darr;</button>
-                        </th>
-                        <th>
-                            Smoking<button onclick="Sort('smoke', 'asc');">&uarr;</button><button
-                                onclick="Sort('smoke', 'des');">&darr;</button>
-                        </th>
-                        <th>
-                            Transit<button onclick="Sort('transit', 'asc');">&uarr;</button><button
-                                onclick="Sort('transit', 'des');">&darr;</button>
-                        </th>
-                        <th>Contact</th>
-                    </tr>
-                </tbody>
-                <tbody id="insertWorks"></tbody>
-            </table>
-            <div id="noWorkspaces"></div>
         </div>
+        <div class="cardsContainer" id="availWorkCards"></div>
+        <div id="noWorkspaces"></div>
     </div>
 </main>

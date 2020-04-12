@@ -201,3 +201,38 @@ td {
 .popUpHide {
   display: none;
 }
+
+.flexCon {
+  display: flex;
+}
+
+/*Cards*/
+
+.cardsContainer {
+  border-radius: 10px;
+  /* background-color: rgba(0, 0, 0, 0.1); */
+}
+
+.card {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  width: 80%;
+  border: black solid 1px;
+  border-radius: 10px;
+  background-color: rgba(70, 209, 123, 0.5);
+  padding: 1em;
+  margin: 0.5em auto;
+}
+
+.cardGroup {
+  display: block;
+}
+
+.cardLine {
+  margin: 0.5em 0;
+}
+
+.bold {
+  font-weight: bold;
+}

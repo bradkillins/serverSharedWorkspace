@@ -54,8 +54,8 @@ const PopulateWorkTable = (dataset) => {
             <br/> There also may not be any Workspaces available.`;
   }
 
-  const table = document.querySelector("#insertWorks");
-  let result = "";
+  const container = document.querySelector("#availWorkCards");
+  let cards = "";
   workspaces.forEach((workspace) => {
     const address = workspace.address;
     const neighbor = workspace.neighbor;
@@ -78,22 +78,52 @@ const PopulateWorkTable = (dataset) => {
     if (term === "week") term = "Week";
     if (term === "month") term = "Month";
 
-    result += `<tr>
-                    <td>${address}</td>
-                    <td>${neighbor}</td>
-                    <td>${type}</td>
-                    <td>${occ}</td>
-                    <td>${sqFeet}</td>
-                    <td>${term}</td>
-                    <td>$${Number.parseFloat(price).toFixed(2)}</td>
-                    <td>${availDate.slice(0, 10)}</td>
-                    <td>${parking ? "Yes" : "No"}</td>
-                    <td>${smoke ? "Yes" : "No"}</td>
-                    <td>${transit ? "Yes" : "No"}</td>
-                    <td><button id="${owner}" onclick="ShowOwnerInfo(this.id);">View</button></td>
-                </tr>`;
+    cards += `<div class="card">
+                <div class="cardGroup">
+                    <div class="cardLine"><span class="bold">Address: </span>${address}</div>
+                    <div class="cardLine"><span class="bold">Neighborhood: </span>${neighbor}</div>
+                    <div class="cardLine"><span class="bold">Parking Available: </span>${
+                      parking ? "Yes" : "No"
+                    }</div>
+                    <div class="cardLine"><span class="bold">Transit Nearby: </span>${
+                      transit ? "Yes" : "No"
+                    }</div>
+                    <div class="cardLine"><span class="bold">Office Square Feet: </span>${sqFeet} ft<sup>2</sup></div>
+                </div>
+                <div class="cardGroup">
+                    <div class="cardLine"><span class="bold">Type: </span>${type}</div>
+                    <div class="cardLine"><span class="bold">Max Occupancy: </span>${occ}</div>
+                    <div class="cardLine"><span class="bold">Rental Term: </span>${term}</div>
+                    <div class="cardLine"><span class="bold">Smoking Allowed: </span
+                      >${smoke ? "Yes" : "No"}</div
+                    >
+                    <div class="cardLine"><span class="bold">Available on: </span
+                      >${availDate.slice(0, 10)}</div
+                    >
+                    <div class="cardLine"><span class="bold">Price: </span
+                      >$${Number.parseFloat(price).toFixed(2)}</div
+                    >
+                </div>
+                <div class="cardGroup">
+                    <div class="cardLine"><button class="btn" id="${owner}" onclick="ShowOwnerInfo(this.id);"
+                    >Contact Owner</button></span></div>
+                </div>
+            </div>`;
   });
-  table.innerHTML = result;
+  container.innerHTML = cards;
+  /* For adding average workspace ratings**
+  <div class="cardLine"><span class="bold">Average Rating: </span>4.3</div>
+                    <div class="cardLine"><span class="bold">My Rating: </span>
+                        <select>
+                            <option value="0">...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+  */
 };
 
 /* FirstLoadWorkTable - run on load of coworkerShow, sets availWorkspaces
@@ -136,7 +166,8 @@ const InsertFilterInput = () => {
 
   if (
     filSelect.options[filSelect.selectedIndex].value === "occ" ||
-    filSelect.options[filSelect.selectedIndex].value === "sqFeet"
+    filSelect.options[filSelect.selectedIndex].value === "sqFeet" ||
+    filSelect.options[filSelect.selectedIndex].value === "price"
   ) {
     insertInput = `<label for="filterTerm">Filter Term: </label>
             <input type="number" id="filterTerm" required min="1" />`;
@@ -199,6 +230,7 @@ const FilterReady = () => {
     filterBy === "address" ||
     filterBy === "neighbor" ||
     filterBy === "occ" ||
+    filterBy === "price" ||
     filterBy === "sqFeet" ||
     filterBy === "availDate"
   ) {
@@ -231,8 +263,6 @@ const FilterReady = () => {
 const Filter = (filterBy, filterInput) => {
   //retrieve availWorkspaces from sessionStorage
   const originalData = JSON.parse(sessionStorage.getItem("availWorkspaces"));
-  console.log("filterBy = " + filterBy);
-  console.log("filterInput = " + filterInput);
   let filteredData;
 
   if (filterBy === "none") {
@@ -243,6 +273,14 @@ const Filter = (filterBy, filterInput) => {
     filterBy === "transit"
   ) {
     filteredData = originalData.filter((e) => e[filterBy] === filterInput);
+  } else if (
+    filterBy === "sqFeet" ||
+    filterBy === "occ" ||
+    filterBy === "price"
+  ) {
+    filteredData = originalData.filter(
+      (e) => Number.parseFloat(e[filterBy]) === Number.parseFloat(filterInput)
+    );
   } else {
     filteredData = originalData.filter((e) =>
       e[filterBy].toLowerCase().includes(filterInput.toLowerCase())
@@ -259,9 +297,10 @@ const Filter = (filterBy, filterInput) => {
  *    @Params - sortBy: the column to sort by
  *            - order: either ascending or descending
  */
-const Sort = (sortBy, order) => {
+const Sort = (order) => {
+  const sortSelect = document.querySelector("#sortBy");
+  const sortBy = sortSelect.options[sortSelect.selectedIndex].value;
   let currentDisplay = JSON.parse(sessionStorage.getItem("displayWorkspaces"));
-
   if (order === "asc") {
     if (
       sortBy === "address" ||
@@ -292,7 +331,9 @@ const Sort = (sortBy, order) => {
         else return 0;
       });
     }
-  } else {
+  }
+  //order === "desc"
+  else {
     if (
       sortBy === "address" ||
       sortBy === "neighbor" ||
