@@ -10,6 +10,7 @@
  **************************************************/
 
 const q = require("../queries");
+const maxSessTime = require("../config").maxSessTime;
 
 /** GenRanId - a pseudo random alpha-numeric character generator
  *  @Params length - how many random characters to generate
@@ -43,5 +44,5 @@ module.exports.validSess = async (sessId) => {
   }
   const now = this.setCurrentDateTime();
   const diffOb = await q.queryDb(q.sessTimeDiff(now, sessId));
-  return diffOb[0].diff > 900 ? false : true;
+  return diffOb[0].diff > maxSessTime ? false : true;
 };

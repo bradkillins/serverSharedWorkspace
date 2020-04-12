@@ -18,6 +18,8 @@ Run app.js in the root folder <br/>
 
 You should now be able to navigate to: localhost:port in your browser. <br/>
 
+User login sessions are set to expire after 15 minutes of inactivity by default.<br/>
+
 There are two user types: <br/>
 
 Owners

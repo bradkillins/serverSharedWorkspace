@@ -25,3 +25,6 @@ module.exports.dbConfig = {
   database: dbName,
   options: { enableArithAbort: true }
 };
+
+//User Session Expire Time - number of seconds user can be idle before session expires
+module.exports.maxSessTime = 900; //Default 900 seconds or 15 minutes
