@@ -82,6 +82,10 @@ module.exports.selectUser = (userId) => {
   return `SELECT * FROM Users WHERE userId = ${userId};`;
 };
 
+module.exports.checkUserType = (sessId) => {
+  return `SELECT type FROM Users as u JOIN Login as l ON l.userId = u.userId WHERE sessId LIKE '${sessId}';`;
+};
+
 /***********************************************
  *     Queries for Properties
  *

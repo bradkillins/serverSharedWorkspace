@@ -10,7 +10,7 @@ Installation:
 
 This application requires Node.js and Microsoft SQL Server <br/>
 
----- The database scripts have recently been updated!! ---- 
+---- The database scripts have recently been updated!! ----
 
 Please run the SQL scripts in the 'dbInstall' folder on your MSSQL server. <br/>
 Configure application setting in 'config.js' in the root folder. <br/>
@@ -22,15 +22,16 @@ There are two user types: <br/>
 
 Owners
 
+- Can view all workspaces that have been listed
 - Can view their own properties/workspaces
 - Can create new properties/workspaces
 - Can edit or delete their own properties/workspaces
 
 Coworkers
 
-- Can view a table of available workspaces that have been marked listed.
-- Can sort or filter by any column in the table.
-- Can view owner details for any workspace in table.
+- Can view all workspaces that have been listed
+- Can sort or filter by various options
+- Can view owner details for any listed workspace
 
 The following logins can be used for testing:
 

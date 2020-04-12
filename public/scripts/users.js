@@ -59,6 +59,7 @@ const Login = async () => {
     //set sessId and firstName into sessionStorage
     sessionStorage.setItem("sessId", fetchResult.sessId);
     sessionStorage.setItem("userName", fetchResult.firstName);
+    sessionStorage.setItem("userType", fetchResult.type);
     //redirect to appropriate main menu
     if (fetchResult.type == "Coworker") document.location = "/coworkerMenu";
     else document.location = "/ownerMenu";

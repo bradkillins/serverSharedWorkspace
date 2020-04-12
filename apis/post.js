@@ -99,20 +99,18 @@ module.exports.login = async (req, res) => {
 //api/property/new
 module.exports.newProp = async (req, res) => {
   const sessId = req.body.sessId;
+  console.log(req.body);
+  //const userType = await q.queryDb(q.checkUserType(sessId));
+  //console.log(userType);
+
   //check if session expired
   const valid = await gen.validSess(sessId);
   if (!valid) {
     res.send({ success: false, msg: "expiredSess" });
   }
   //valid session
-  else if (
-    !req.body.address ||
-    !req.body.neighbor ||
-    !req.body.sqFeet ||
-    !req.body.parking ||
-    !req.body.transit ||
-    !req.body.listed
-  ) {
+  //else if() {}
+  else if (!req.body.address || !req.body.neighbor || !req.body.sqFeet) {
     res.send({
       success: false,
       msg: "Please enter all information in the form. Try again."
@@ -164,9 +162,7 @@ module.exports.newWork = async (req, res) => {
     !req.body.occ ||
     !req.body.availDate ||
     !req.body.term ||
-    !req.body.price ||
-    !req.body.smoke ||
-    !req.body.listed
+    !req.body.price
   ) {
     res.send({
       success: false,

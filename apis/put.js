@@ -19,14 +19,7 @@ module.exports.property = async (req, res) => {
   const valid = await gen.validSess(sessId);
   if (!valid) {
     res.send({ success: false, msg: "expiredSess" });
-  } else if (
-    !req.body.address ||
-    !req.body.neighbor ||
-    !req.body.sqFeet ||
-    !req.body.parking ||
-    !req.body.transit ||
-    !req.body.listed
-  ) {
+  } else if (!req.body.address || !req.body.neighbor || !req.body.sqFeet) {
     res.send({
       success: false,
       msg: "Please enter all information in the form. Try again."
@@ -82,9 +75,7 @@ module.exports.workspace = async (req, res) => {
     !req.body.occ ||
     !req.body.availDate ||
     !req.body.term ||
-    !req.body.price ||
-    !req.body.smoke ||
-    !req.body.listed
+    !req.body.price
   ) {
     res.send({
       success: false,

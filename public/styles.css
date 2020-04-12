@@ -25,9 +25,9 @@ h1 {
 .head-title {
   color: white;
   width: 70%;
-  margin: auto;
   text-align: center;
   font-size: 2.5em;
+  margin: auto 0;
 }
 
 .head-title a {
@@ -50,16 +50,17 @@ a {
 
 .navLinks a {
   color: #66281e;
-  padding: 4px;
+  padding: 6px 12px;
+  font-size: 1.2em;
+  text-decoration: none;
+  background-color: rgba(0, 255, 0, 0.1);
+  border-radius: 10px;
 }
-
-.navLinks a:hover {
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 5px;
-}
-
 .activeLink {
-  font-weight: bolder;
+  border: solid 4px #3a8062;
+}
+.navLinks a:hover {
+  background-color: rgba(0, 255, 0, 0.2);
 }
 
 /*
@@ -74,6 +75,25 @@ a {
   background-position: center;
   background-repeat: no-repeat;
   height: 45vh;
+}
+
+.title {
+  font-size: 2em;
+  margin: 1em 0;
+}
+
+.subTitle {
+  font-size: 1.5em;
+  margin: 0.8em 0;
+}
+
+.heading {
+  font-size: 1.2em;
+  margin: 0.5em 0;
+}
+
+.list {
+  padding: 0 1.8em;
 }
 
 .content {
@@ -95,6 +115,7 @@ a {
 .btn {
   padding: 3px;
   background-color: #36b5e3;
+  border-radius: 2px;
 }
 
 .btnRed {
@@ -157,7 +178,23 @@ td {
 }
 
 .userNameDisplay {
-  margin: auto 1em;
+  margin: auto 2em;
+  display: flex;
+  justify-content: space-between;
+  width: 20%;
+}
+
+.userNameDisplay a {
+  color: #66281e;
+  padding: 6px 12px;
+  font-size: 1em;
+  text-decoration: none;
+  background-color: rgba(0, 255, 0, 0.1);
+  border-radius: 10px;
+}
+
+.userNameDisplay a:hover {
+  background-color: rgba(0, 255, 0, 0.2);
 }
 
 .popUp {

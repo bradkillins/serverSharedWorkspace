@@ -1,19 +1,23 @@
-/*****************************************************
- *         Shared Workspace: Phase 2
+/**************************************************************
+ *           Shared Workspace: Phase 2
  *
- *         Final Project
- *         By Bradley Killins
- *         SODV1201
+ *          Final Project
+ *          By Bradley Killins
+ *          SODV1201
  *
- *         Dependencies:
- *           body-parser
- *           express
- *           express-handlebars
- *           mssql
+ *           Dependencies:
+ *            body-parser
+ *            express
+ *            express-handlebars
+ *            mssql
  *
- *  Please configure application setting in config.js
+ *    *** Please configure application setting in config.js ***
  *
- ******************************************************/
+ *    Splash Image:
+ *    by Shridhar Gupta on Unsplash
+ *    https://unsplash.com/photos/dZxQn4VEv2M
+ *
+ **************************************************************/
 
 /******************************
  *       Server Setup
@@ -58,6 +62,7 @@ app.use(express.static("./public"));
 //import api routes from routes.js
 app.use(require("./routes"));
 
+//send 404 if requested route doesn't exist
 app.use("/", (req, res) => {
   res.status(404).render("err", {
     title: "Error: 404",

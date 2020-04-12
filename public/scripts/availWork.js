@@ -390,5 +390,12 @@ const ShowOwnerInfo = async (userId) => {
   }
 };
 
+const backToMenu = () => {
+  const userType = sessionStorage.getItem("userType");
+  if (userType === "Owner")
+    document.querySelector("#availBack").innerHTML =
+      "<a href='/ownerMenu'>Back to Main Menu</a>";
+};
+backToMenu();
 //call formListener from general.js
 FormListener("#filterForm", FilterReady);
