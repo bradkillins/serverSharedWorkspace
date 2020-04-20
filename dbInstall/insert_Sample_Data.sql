@@ -7,12 +7,12 @@ USE Brad_SharedWorkspace;
 GO
 
 INSERT INTO Users
-VALUES 
+VALUES
 	('brad@killins.com', 'Brad', 'Killins', '555-123-4567', 'Coworker'),
 	('john@smith.com', 'John', 'Smith', '780-555-2222', 'Owner'),
 	('jen@tan.com', 'Jen', 'Tanverie', '123-456-7890', 'Coworker'),
-	('tom@garder.com', 'Tom','Garder','403-111-2222','Coworker'),
-	('claire@gill.com', 'Claire','Gilliard','603-888-1111','Owner');
+	('tom@garder.com', 'Tom', 'Garder', '403-111-2222', 'Coworker'),
+	('claire@gill.com', 'Claire', 'Gilliard', '603-888-1111', 'Owner');
 
 INSERT INTO Login
 VALUES
@@ -107,3 +107,4 @@ VALUES
 	(12, '/img/work/N9fhBOoif9ab37Ob.jpg'),
 	(15, '/img/work/90HUOivh39vHO903.jpg'),
 	(10, '/img/work/a88yfpHIO92cnklS.jpg');
+	

@@ -38,11 +38,16 @@ module.exports.setCurrentDateTime = () => {
   }`;
 };
 
+/** validSess - Checks to see if the sessId is valid and not expired */
 module.exports.validSess = async (sessId) => {
+  const allSessIds = await q.queryDb(q.selectSessIds());
   if (sessId == "null") {
     return false;
+  } else if (allSessIds.findIndex((e) => e.sessId == sessId) == -1) {
+    return false;
+  } else {
+    const now = this.setCurrentDateTime();
+    const diffOb = await q.queryDb(q.sessTimeDiff(now, sessId));
+    return diffOb[0].diff > maxSessTime ? false : true;
   }
-  const now = this.setCurrentDateTime();
-  const diffOb = await q.queryDb(q.sessTimeDiff(now, sessId));
-  return diffOb[0].diff > maxSessTime ? false : true;
 };

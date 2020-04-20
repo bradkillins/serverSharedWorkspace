@@ -1,5 +1,5 @@
 <div class="popUp popUpHide" id="popUp">
-    <div class="popClose" onclick="ClosePopup();">
+    <div id="popClose">
         <div>X</div>
     </div>
     <div id="popMsg">
@@ -18,6 +18,7 @@
     <div class="content">
         <a href="/showProp">Back to Properties</a>
         <h1>Edit Property Info</h1>
+        <div id="errFeedback"></div>
         <div class="formContainer">
             <form id="editProperty">
                 <div class="formLine">
@@ -53,7 +54,7 @@
                 </div>
                 <div class="formSubmitLine">
                     <button type="submit" class="btn">Update</button>
-                    <button type="button" onclick="ConfirmDeleteProp();" class="btnRed">
+                    <button type="button" id="conDelBtn" class="btnRed">
                         Delete
                     </button>
                 </div>

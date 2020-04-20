@@ -11,9 +11,8 @@
  *   saving, editing, and displaying properties.
  ***************************************************/
 
-/* CreateNewProperty - instantiates a new property object and saves it to the
- *                     properties array in local storage, and to currentProperty
- *                     in sessionStorage.
+/* CreateNewProperty - creates a new property and sends it to the api
+ **                    then display message from server
  */
 const CreateNewProperty = async () => {
   const sessId = sessionStorage.getItem("sessId");
@@ -49,7 +48,7 @@ const CreateNewProperty = async () => {
 };
 
 /* ShowProperties - gets the properties with sessId then
- *              fills in the #propertiesTable
+ **              fills in the #propertiesTable
  */
 const ShowProperties = async () => {
   const sessId = sessionStorage.getItem("sessId");
@@ -61,8 +60,7 @@ const ShowProperties = async () => {
     console.log(fetchRes.msg);
   } else {
     //update sessId
-    const newSessId = fetchRes.newSessId;
-    sessionStorage.setItem("sessId", newSessId);
+    sessionStorage.setItem("sessId", fetchRes.newSessId);
     //check if properties array is empty
     if (!fetchRes.properties.length) {
       document.querySelector(
@@ -72,21 +70,12 @@ const ShowProperties = async () => {
 
     const propertiesTable = document.querySelector("#propertiesTable");
     fetchRes.properties.forEach((e) => {
-      let parking = "No";
-      if (e.parking) {
-        parking = "Yes";
-      }
-      let transit = "No";
-      if (e.transit) {
-        transit = "Yes";
-      }
-      let listed = "No";
-      if (e.listed) {
-        listed = "Yes";
-      }
+      let parking = e.parking == "0" ? "No" : "Yes";
+      let transit = e.transit == "0" ? "No" : "Yes";
+      let listed = e.listed == "0" ? "No" : "Yes";
 
       let result = `<tbody><tr>
-          <td><button name="${e.propId}" onclick="EditSelected('prop', this.name, '/editProp');">Edit</button></td>
+          <td><button id="p${e.propId}" name="${e.propId}" class = "btn">Edit</button></td>
           <td>${e.address}</td>
           <td>${e.neighbor}</td>
           <td>${e.sqFeet}</td>
@@ -94,48 +83,70 @@ const ShowProperties = async () => {
           <td>${transit}</td>
           <td>${listed}</td>
           <td>${e.numOfWork} Workspaces
-          <button name="${e.propId}" onclick="EditSelected('prop', this.name, '/showPropWorkspaces');">View/Add/Modify</button></td>
+          <button id="w${e.propId}" name="${e.propId}" class="btn">View/Add/Modify</button></td>
           </tr></tbody>`;
       propertiesTable.insertAdjacentHTML("beforeend", result);
+      function edProp() {
+        EditSelected("prop", this.name, "/editProp");
+      }
+      function showWork() {
+        EditSelected("prop", this.name, "/showPropWorkspaces");
+      }
+      document
+        .querySelector(`#p${e.propId}`)
+        .addEventListener("click", edProp, false);
+      document
+        .querySelector(`#w${e.propId}`)
+        .addEventListener("click", showWork, false);
     });
   }
 };
 
 /* PopulatePropEdit - populates the edit form with the current
- *                Property details
+ **                   Property details
  */
 const PopulatePropEdit = async () => {
-  //get form elements
-  const address = document.querySelector("#address");
-  const neighbor = document.querySelector("#neighborhood");
-  const sqFeet = document.querySelector("#sqFeet");
-  const parkingYes = document.querySelector("#parkingYes");
-  const parkingNo = document.querySelector("#parkingNo");
-  const transitYes = document.querySelector("#transitYes");
-  const transitNo = document.querySelector("#transitNo");
-  const listYes = document.querySelector("#listYes");
-  const listNo = document.querySelector("#listNo");
-  //populate form with current values
   const propId = sessionStorage.getItem("propId");
-  const currentProp = await getFetch(`/api/property/${propId}`);
-  address.value = currentProp.address;
-  neighbor.value = currentProp.neighbor;
-  sqFeet.value = currentProp.sqFeet;
-  if (currentProp.parking == 1) {
-    parkingYes.checked = true;
+  const sessId = sessionStorage.getItem("sessId");
+  const fetchRes = await getFetch(`/api/property/${propId}/${sessId}`);
+  if (!fetchRes.success) {
+    console.log(fetchRes.msg);
+    if (fetchRes.msg == "expiredSess") document.location = "/expired";
+    document.querySelector("#errFeedback").innerHTML = fetchRes.msg;
   } else {
-    parkingNo.checked = true;
+    //update sessId
+    sessionStorage.setItem("sessId", fetchRes.newSessId);
+    const currentProp = fetchRes.property;
+
+    //populate form with current values
+    //get form elements
+    const address = document.querySelector("#address");
+    const neighbor = document.querySelector("#neighborhood");
+    const sqFeet = document.querySelector("#sqFeet");
+    const parkingYes = document.querySelector("#parkingYes");
+    const parkingNo = document.querySelector("#parkingNo");
+    const transitYes = document.querySelector("#transitYes");
+    const transitNo = document.querySelector("#transitNo");
+    const listYes = document.querySelector("#listYes");
+    const listNo = document.querySelector("#listNo");
+    //set values
+    address.value = currentProp.address;
+    neighbor.value = currentProp.neighbor;
+    sqFeet.value = currentProp.sqFeet;
+    if (currentProp.parking == 1) parkingYes.checked = true;
+    else parkingNo.checked = true;
+    if (currentProp.transit == 1) transitYes.checked = true;
+    else transitNo.checked = true;
+    if (currentProp.listed == 1) listYes.checked = true;
+    else listNo.checked = true;
   }
-  if (currentProp.transit == 1) {
-    transitYes.checked = true;
-  } else {
-    transitNo.checked = true;
-  }
-  if (currentProp.listed == 1) {
-    listYes.checked = true;
-  } else {
-    listNo.checked = true;
-  }
+  //add event listeners
+  document
+    .querySelector("#popClose")
+    .addEventListener("click", ClosePopup, false);
+  document
+    .querySelector("#conDelBtn")
+    .addEventListener("click", ConfirmDeleteProp, false);
 };
 
 /** EditProp - Takes form input and updates property in db
@@ -182,10 +193,16 @@ const ConfirmDeleteProp = () => {
   <p><br/>Warning this will also delete all associated workspaces with this property.
   <br/>This is permanent and cannot be undone!!<br/>&nbsp</p>
   <div class="formSubmitLine">
-    <button type="button" onclick="DeleteProp();" class="btnRed">Delete</button>
-    <button type="button" onclick="ClosePopup();" class="btn">Cancel</button>  
+    <button id="delBtn" class="btnRed">Delete</button>
+    <button id="canBtn" class="btn">Cancel</button>  
   </div>`;
   OpenPopup(confirm);
+  document
+    .querySelector("#delBtn")
+    .addEventListener("click", DeleteProp, false);
+  document
+    .querySelector("#canBtn")
+    .addEventListener("click", ClosePopup, false);
 };
 
 /* DeleteProp - Removes the property from db

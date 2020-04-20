@@ -55,7 +55,7 @@ const PopulateWorkTable = (dataset) => {
   }
 
   const container = document.querySelector("#availWorkCards");
-  let cards = "";
+  container.innerHTML = "";
   workspaces.forEach((workspace) => {
     const address = workspace.address;
     const neighbor = workspace.neighbor;
@@ -78,7 +78,7 @@ const PopulateWorkTable = (dataset) => {
     if (term === "week") term = "Week";
     if (term === "month") term = "Month";
 
-    cards += `<div class="card">
+    let card = `<div class="card">
                 <div class="cardGroup">
                     <div class="cardLine"><span class="bold">Address: </span>${address}</div>
                     <div class="cardLine"><span class="bold">Neighborhood: </span>${neighbor}</div>
@@ -105,12 +105,21 @@ const PopulateWorkTable = (dataset) => {
                     >
                 </div>
                 <div class="cardGroup">
-                    <div class="cardLine"><button class="btn" id="${owner}" onclick="ShowOwnerInfo(this.id);"
+                    <div class="cardLine"><button class="btn" id="o${owner}-${
+      workspace.workId
+    }" name="${owner}"
                     >Contact Owner</button></span></div>
                 </div>
             </div>`;
+    container.insertAdjacentHTML("beforeend", card);
+    function shwOwner() {
+      ShowOwnerInfo(this.name);
+    }
+    document
+      .querySelector(`#o${owner}-${workspace.workId}`)
+      .addEventListener("click", shwOwner, false);
   });
-  container.innerHTML = cards;
+
   /* For adding average workspace ratings**
   <div class="cardLine"><span class="bold">Average Rating: </span>4.3</div>
                     <div class="cardLine"><span class="bold">My Rating: </span>
@@ -169,8 +178,10 @@ const InsertFilterInput = () => {
     filSelect.options[filSelect.selectedIndex].value === "sqFeet" ||
     filSelect.options[filSelect.selectedIndex].value === "price"
   ) {
-    insertInput = `<label for="filterTerm">Filter Term: </label>
-            <input type="number" id="filterTerm" required min="1" />`;
+    insertInput = `<label for="filterTermLow">From: </label>
+            <input type="number" id="filterTermLow" required min="1" />
+            <label for="filterTermHigh">To: </label>
+            <input type="number" id="filterTermHigh" required min="1" />`;
   }
 
   if (filSelect.options[filSelect.selectedIndex].value === "term") {
@@ -183,8 +194,10 @@ const InsertFilterInput = () => {
   }
 
   if (filSelect.options[filSelect.selectedIndex].value === "availDate") {
-    insertInput = `<label for="filterTerm">This Date: </label>
-          <input type="date" id="filterTerm" required />`;
+    insertInput = `<label for="filterTermLow">Dates From: </label>
+          <input type="date" id="filterTermLow" required />
+          <label for="filterTermHigh">To: </label>
+          <input type="date" id="filterTermHigh" required />`;
   }
 
   if (
@@ -226,16 +239,23 @@ const FilterReady = () => {
 
   let filterInput;
   //input box only filterBy options
+  if (filterBy === "address" || filterBy === "neighbor") {
+    filterInput = document.querySelector("#filterTerm").value;
+  }
+
+  //low to high input
   if (
-    filterBy === "address" ||
-    filterBy === "neighbor" ||
     filterBy === "occ" ||
     filterBy === "price" ||
     filterBy === "sqFeet" ||
     filterBy === "availDate"
   ) {
-    filterInput = document.querySelector("#filterTerm").value;
+    filterInput =
+      document.querySelector("#filterTermLow").value +
+      ";" +
+      document.querySelector("#filterTermHigh").value;
   }
+
   //select list filterBy options
   if (filterBy === "type" || filterBy === "term") {
     let filSelect = document.querySelector("#filterTerm");
@@ -278,9 +298,25 @@ const Filter = (filterBy, filterInput) => {
     filterBy === "occ" ||
     filterBy === "price"
   ) {
+    const inputLow = Number.parseFloat(filterInput.split(";")[0]);
+    const inputHigh = Number.parseFloat(filterInput.split(";")[1]);
     filteredData = originalData.filter(
-      (e) => Number.parseFloat(e[filterBy]) === Number.parseFloat(filterInput)
+      (e) =>
+        Number.parseFloat(e[filterBy]) >= inputLow &&
+        Number.parseFloat(e[filterBy]) <= inputHigh
     );
+  } else if (filterBy === "availDate") {
+    const inputLow = new Date(filterInput.split(";")[0]);
+    const inputHigh = new Date(filterInput.split(";")[1]);
+    filteredData = originalData.filter((e) => {
+      const data = new Date(e[filterBy]);
+      if (
+        data.getTime() >= inputLow.getTime() &&
+        data.getTime() <= inputHigh.getTime()
+      )
+        return true;
+      else return false;
+    });
   } else {
     filteredData = originalData.filter((e) =>
       e[filterBy].toLowerCase().includes(filterInput.toLowerCase())
@@ -397,5 +433,21 @@ const backToMenu = () => {
       "<a href='/ownerMenu'>Back to Main Menu</a>";
 };
 backToMenu();
+
+function AvailWork() {
+  const popUpClose = document.querySelector("#closePopUp");
+  popUpClose.addEventListener("click", ClosePopup, false);
+}
+
+AvailWork();
+
+//add event listeners for sort buttons
+document.querySelector("#sortAsc").addEventListener("click", () => {
+  Sort("asc");
+});
+document.querySelector("#sortDes").addEventListener("click", () => {
+  Sort("desc");
+});
+
 //call formListener from general.js
 FormListener("#filterForm", FilterReady);

@@ -181,7 +181,7 @@ router.post("/api/workspace/new", jsonParser, post.newWork);
 const get = require("./apis/get");
 
 router.get("/api/properties/:sessId", urlParser, get.userProperties);
-router.get("/api/property/:propId", urlParser, get.property);
+router.get("/api/property/:propId/:sessId", urlParser, get.property);
 router.get("/api/workspaces/:propId/:sessId", urlParser, get.propWorkspaces);
 router.get("/api/workspace/:workId", urlParser, get.workspace);
 router.get("/api/availWorkspaces/:sessId", urlParser, get.availWorkspaces);

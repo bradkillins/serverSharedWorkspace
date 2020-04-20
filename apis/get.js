@@ -36,13 +36,51 @@ module.exports.userProperties = async (req, res) => {
   }
 };
 
-//api/property/:propId **** add session verification ****
+//api/property/:propId/:sessId
 module.exports.property = async (req, res) => {
   const propId = req.params.propId;
-  const property = await q.queryDb(
-    `SELECT * FROM Properties WHERE propId LIKE '${propId}'`
-  );
-  res.send(property[0]);
+  const sessId = req.params.sessId;
+  //check if session expired
+  const valid = await gen.validSess(sessId);
+  if (!valid) {
+    res.send({ success: false, msg: "expiredSess" });
+  }
+  //valid session
+  else {
+    //update sess
+    const newSessId = gen.GenRanId(64);
+    await q.queryDb(q.updateSess(sessId, newSessId, gen.setCurrentDateTime()));
+    //get property from db
+    const property = await q.queryDb(q.selectProperty(propId));
+    //failed db query
+    if (!property || property == "Db Error") {
+      res.send({
+        success: false,
+        msg: "Database Error, <a href='/contact'>contact</a> the site admin.",
+        newSessId: newSessId,
+        property: property
+      });
+    }
+    //no property found in db
+    else if (property.length < 1) {
+      res.send({
+        success: false,
+        msg:
+          "No matching property found! This should not happen. Please <a href='/contact'>contact</a> a site admin.",
+        newSessId: newSessId,
+        property: property
+      });
+    }
+    //successful db query
+    else {
+      res.send({
+        success: true,
+        msg: "Retrieved Property Id: " + propId,
+        newSessId: newSessId,
+        property: property[0]
+      });
+    }
+  }
 };
 
 //api/workspaces/:propId/:sessId

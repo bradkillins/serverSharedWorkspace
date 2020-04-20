@@ -1,5 +1,5 @@
 <div class="popUp popUpHide" id="popUp">
-    <div class="popClose" onclick="ClosePopup();">
+    <div class="popClose" id="closePopUp">
         <div>X</div>
     </div>
     <div id="popMsg">Loading</div>
@@ -68,8 +68,8 @@
                     </div>
                 </div>
                 <div class="formSubmitLine">
-                    <button class="btn" onclick="Sort('asc');">Sort Ascending</button>
-                    <button class="btn" onclick="Sort('desc');">Sort Descending</button>
+                    <button id="sortAsc" class="btn">Sort Ascending</button>
+                    <button id="sortDes" class="btn">Sort Descending</button>
                 </div>
             </div>
         </div>

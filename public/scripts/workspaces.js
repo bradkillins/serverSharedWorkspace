@@ -57,9 +57,9 @@ const CreateNewWorkspace = async () => {
  *                  Displays an appropriate message if no workspaces found.
  */
 const ShowWorkspaces = async () => {
+  await DisplayPropName();
   const propId = sessionStorage.getItem("propId");
   const sessId = sessionStorage.getItem("sessId");
-  DisplayPropName();
 
   const fetchRes = await getFetch(`/api/workspaces/${propId}/${sessId}`);
   const workspaces = fetchRes.workspaces;
@@ -97,8 +97,9 @@ const ShowWorkspaces = async () => {
               <tr>
                 <td>
                   <button 
-                    name="${e.workId}" 
-                    onclick="EditSelected('work', this.name, '/editWork');"
+                    class="btn"
+                    id="w${e.workId}"
+                    name="${e.workId}"
                     >Edit
                   </button>
                 </td>
@@ -111,6 +112,12 @@ const ShowWorkspaces = async () => {
                 <td>${listed}</td>
               </tr></tbody>`;
       workspacesTable.insertAdjacentHTML("beforeend", result);
+      function edWork() {
+        EditSelected("work", this.name, "/editWork");
+      }
+      document
+        .querySelector(`#w${e.workId}`)
+        .addEventListener("click", edWork, false);
     });
   }
 };
@@ -144,6 +151,13 @@ const PopulateWorkEdit = async () => {
   if (currentWork.term === "month") term.options[2].selected = true;
   price.value = currentWork.price;
   currentWork.listed ? (listYes.checked = true) : (listNo.checked = true);
+  //add event listeners
+  document
+    .querySelector("#popClose")
+    .addEventListener("click", ClosePopup, false);
+  document
+    .querySelector("#conDelBtn")
+    .addEventListener("click", ConfirmDeleteWork, false);
 };
 
 /* EditCurrentWork - Gets form input and updates the workspace
@@ -195,10 +209,16 @@ const ConfirmDeleteWork = () => {
   <p><br/>Warning this will delete this workspaces.
   <br/>This is permanent and cannot be undone!!<br/>&nbsp</p>
   <div class="formSubmitLine">
-    <button type="button" onclick="DeleteWork();" class="btnRed">Delete</button>
-    <button type="button" onclick="ClosePopup();" class="btn">Cancel</button>  
+    <button id="delBtn" class="btnRed">Delete</button>
+    <button id="canBtn" class="btn">Cancel</button>  
   </div>`;
   OpenPopup(confirm);
+  document
+    .querySelector("#delBtn")
+    .addEventListener("click", DeleteWork, false);
+  document
+    .querySelector("#canBtn")
+    .addEventListener("click", ClosePopup, false);
 };
 
 /* DeleteWork - Removes the workspace from the db
@@ -211,8 +231,7 @@ const DeleteWork = async () => {
   ClosePopup();
   if (fetchRes.success) {
     //update sessId
-    const newSessId = fetchRes.newSessId;
-    sessionStorage.setItem("sessId", newSessId);
+    sessionStorage.setItem("sessId", fetchRes.newSessId);
     //provide feedback to user
     document.querySelector(".formFeedback").innerHTML = `${fetchRes.msg}`;
     setTimeout(() => {
@@ -229,13 +248,23 @@ const DeleteWork = async () => {
 };
 
 //displays the current property address in #titleProp
-const GetName = async () => {
+const DisplayPropName = async () => {
   const propId = sessionStorage.getItem("propId");
-  const title = await getFetch(`/api/property/${propId}`);
-  document.querySelector("#titleProp").innerText = title.address;
-};
-const DisplayPropName = () => {
-  GetName();
+  const sessId = sessionStorage.getItem("sessId");
+  const fetchRes = await getFetch(`/api/property/${propId}/${sessId}`);
+  if (fetchRes.success) {
+    //update sessId
+    sessionStorage.setItem("sessId", fetchRes.newSessId);
+    //set workspace name
+    document.querySelector("#titleProp").innerText = fetchRes.property.address;
+  } else {
+    if (fetchRes.msg == "expiredSess") document.location = "/expired";
+    document.querySelector("#errFeedback").innerHTML = `${fetchRes.msg}<br/>
+    Please <a href="/contact">contact</a> the site admin if this keeps happening.`;
+    setTimeout(() => {
+      document.querySelector("#errFeedback").innerHTML = "";
+    }, 8000);
+  }
 };
 
 //call formListener from general.js

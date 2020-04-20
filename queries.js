@@ -69,6 +69,11 @@ module.exports.updateSess = (oldSessId, newSessId, lastSessTime) => {
   WHERE sessId LIKE '${oldSessId}';`;
 };
 
+/** selectSessIds - Query the database for a list of all sessIds */
+module.exports.selectSessIds = () => {
+  return "SELECT sessId FROM Login;";
+};
+
 /** selectUserNameType - Query that selects user first name and type Where email*/
 module.exports.selectUserNameType = (email) => {
   return `SELECT firstName, type FROM Users WHERE email LIKE '${email}';`;
@@ -99,6 +104,13 @@ FROM Properties AS p
 	LEFT JOIN Workspaces AS w ON p.propId = w.propId
 WHERE userId = (SELECT userId FROM Login WHERE sessId LIKE '${sessId}')
 GROUP BY p.propId, address, neighbor, sqFeet, parking, transit, p.listed;`;
+};
+
+/** selectProperty - gets a property by propId */
+module.exports.selectProperty = (propId) => {
+  return `SELECT *
+    FROM Properties
+    WHERE propId LIKE ${propId}`;
 };
 
 /** insertNewProp - adds a new property to the properties table */

@@ -99,7 +99,6 @@ module.exports.login = async (req, res) => {
 //api/property/new
 module.exports.newProp = async (req, res) => {
   const sessId = req.body.sessId;
-  console.log(req.body);
   //const userType = await q.queryDb(q.checkUserType(sessId));
   //console.log(userType);
 
