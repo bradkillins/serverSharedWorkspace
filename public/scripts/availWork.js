@@ -101,7 +101,7 @@ const PopulateWorkTable = (dataset) => {
                       >${availDate.slice(0, 10)}</div
                     >
                     <div class="cardLine"><span class="bold">Price: </span
-                      >$${Number.parseFloat(price).toFixed(2)}</div
+                      >$${(Math.round(price * 100) / 100).toFixed(2)}</div
                     >
                 </div>
                 <div class="cardGroup">

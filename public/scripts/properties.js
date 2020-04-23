@@ -78,7 +78,7 @@ const ShowProperties = async () => {
           <td><button id="p${e.propId}" name="${e.propId}" class = "btn">Edit</button></td>
           <td>${e.address}</td>
           <td>${e.neighbor}</td>
-          <td>${e.sqFeet}</td>
+          <td class="r-text">${e.sqFeet}</td>
           <td>${parking}</td>
           <td>${transit}</td>
           <td>${listed}</td>

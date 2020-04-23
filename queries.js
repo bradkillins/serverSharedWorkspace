@@ -180,6 +180,13 @@ module.exports.selectPropWorkspaces = (propId) => {
   return `SELECT * FROM Workspaces WHERE propId = '${propId}'`;
 };
 
+/** selectWorkspace - gets a workspace by workId */
+module.exports.selectWorkspace = (workId) => {
+  return `SELECT *
+    FROM Workspaces
+    WHERE workId LIKE ${workId}`;
+};
+
 /** updateWork - updates a workspace with workId */
 module.exports.updateWork = (
   workId,

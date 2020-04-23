@@ -108,7 +108,9 @@ const ShowWorkspaces = async () => {
                 <td>${smoke}</td>
                 <td>${e.availDate.slice(0, 10)}</td>
                 <td>${term}</td>
-                <td>${e.price}</td>
+                <td class="r-text">$${(Math.round(e.price * 100) / 100).toFixed(
+                  2
+                )}</td>
                 <td>${listed}</td>
               </tr></tbody>`;
       workspacesTable.insertAdjacentHTML("beforeend", result);
@@ -125,39 +127,50 @@ const ShowWorkspaces = async () => {
 /* PopulateWork - populates the edit workspace form with data
  */
 const PopulateWorkEdit = async () => {
-  //get form elements
-  const type = document.querySelector("#type");
-  const occ = document.querySelector("#occ");
-  const smokeYes = document.querySelector("#smokeYes");
-  const smokeNo = document.querySelector("#smokeNo");
-  const availDate = document.querySelector("#availDate");
-  const term = document.querySelector("#term");
-  const price = document.querySelector("#price");
-  const listYes = document.querySelector("#listYes");
-  const listNo = document.querySelector("#listNo");
-
-  //get workspace data
   const workId = sessionStorage.getItem("workId");
-  const currentWork = await getFetch(`/api/workspace/${workId}`);
-  //fill in form
-  if (currentWork.type === "meet") type.options[0].selected = true;
-  if (currentWork.type === "office") type.options[1].selected = true;
-  if (currentWork.type === "desk") type.options[2].selected = true;
-  occ.value = currentWork.occ;
-  currentWork.smoke ? (smokeYes.checked = true) : (smokeNo.checked = true);
-  availDate.value = currentWork.availDate.slice(0, 10);
-  if (currentWork.term === "day") term.options[0].selected = true;
-  if (currentWork.term === "week") term.options[1].selected = true;
-  if (currentWork.term === "month") term.options[2].selected = true;
-  price.value = currentWork.price;
-  currentWork.listed ? (listYes.checked = true) : (listNo.checked = true);
-  //add event listeners
-  document
-    .querySelector("#popClose")
-    .addEventListener("click", ClosePopup, false);
-  document
-    .querySelector("#conDelBtn")
-    .addEventListener("click", ConfirmDeleteWork, false);
+  const sessId = sessionStorage.getItem("sessId");
+  const fetchRes = await getFetch(`/api/workspace/${workId}/${sessId}`);
+  if (!fetchRes.success) {
+    console.log(fetchRes.msg);
+    if (fetchRes.msg == "expiredSess") document.location = "/expired";
+    document.querySelector("#errFeedback").innerHTML = fetchRes.msg;
+  } else {
+    //update sessId
+    sessionStorage.setItem("sessId", fetchRes.newSessId);
+    const currentWork = fetchRes.workspace;
+
+    //populate form with current values
+    //get form elements
+    const type = document.querySelector("#type");
+    const occ = document.querySelector("#occ");
+    const smokeYes = document.querySelector("#smokeYes");
+    const smokeNo = document.querySelector("#smokeNo");
+    const availDate = document.querySelector("#availDate");
+    const term = document.querySelector("#term");
+    const price = document.querySelector("#price");
+    const listYes = document.querySelector("#listYes");
+    const listNo = document.querySelector("#listNo");
+
+    //fill in form
+    if (currentWork.type === "meet") type.options[0].selected = true;
+    if (currentWork.type === "office") type.options[1].selected = true;
+    if (currentWork.type === "desk") type.options[2].selected = true;
+    occ.value = currentWork.occ;
+    currentWork.smoke ? (smokeYes.checked = true) : (smokeNo.checked = true);
+    availDate.value = currentWork.availDate.slice(0, 10);
+    if (currentWork.term === "day") term.options[0].selected = true;
+    if (currentWork.term === "week") term.options[1].selected = true;
+    if (currentWork.term === "month") term.options[2].selected = true;
+    price.value = (Math.round(currentWork.price * 100) / 100).toFixed(2);
+    currentWork.listed ? (listYes.checked = true) : (listNo.checked = true);
+    //add event listeners
+    document
+      .querySelector("#popClose")
+      .addEventListener("click", ClosePopup, false);
+    document
+      .querySelector("#conDelBtn")
+      .addEventListener("click", ConfirmDeleteWork, false);
+  }
 };
 
 /* EditCurrentWork - Gets form input and updates the workspace

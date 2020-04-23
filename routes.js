@@ -159,7 +159,7 @@ router.get("/expired", (req, res) => {
  *  POST:   //api/property/new               - create new property
  *  POST:   //api/workspace/new              - create new workspace
  *  GET:    //api/properties/:sessId         - gets all properties of a certain user
- *  GET:    //api/property/:propId           - gets a property by propId
+ *  GET:    //api/property/:propId/:sessId   - gets a property by propId
  *  GET:    //api/workspaces/:propId/:sessId - gets all workspaces tied to a certain property
  *  GET:    //api/workspace/:workId          - gets a workspace by workId
  *  GET:    //api/availWorkspaces/:sessId    - gets all available workspaces
@@ -183,7 +183,7 @@ const get = require("./apis/get");
 router.get("/api/properties/:sessId", urlParser, get.userProperties);
 router.get("/api/property/:propId/:sessId", urlParser, get.property);
 router.get("/api/workspaces/:propId/:sessId", urlParser, get.propWorkspaces);
-router.get("/api/workspace/:workId", urlParser, get.workspace);
+router.get("/api/workspace/:workId/:sessId", urlParser, get.workspace);
 router.get("/api/availWorkspaces/:sessId", urlParser, get.availWorkspaces);
 router.get("/api/user/:userId/:sessId", urlParser, get.user);
 

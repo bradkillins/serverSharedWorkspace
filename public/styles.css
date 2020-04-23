@@ -178,6 +178,10 @@ td {
   padding: 5px;
 }
 
+.r-text {
+  text-align: right;
+}
+
 .userNameDisplay {
   margin: auto 2em;
   display: flex;

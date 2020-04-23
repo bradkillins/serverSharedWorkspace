@@ -108,13 +108,49 @@ module.exports.propWorkspaces = async (req, res) => {
   }
 };
 
-//api/workspace/:workId  **** add session verification ****
+//api/workspace/:workId/:sessId
 module.exports.workspace = async (req, res) => {
+  const sessId = req.params.sessId;
   const workId = req.params.workId;
-  const workspace = await q.queryDb(
-    `SELECT * FROM Workspaces WHERE workId LIKE '${workId}'`
-  );
-  res.send(workspace[0]);
+
+  //check if session expired
+  const valid = await gen.validSess(sessId);
+  if (!valid) {
+    res.send({ success: false, msg: "expiredSess" });
+  }
+  //valid session
+  else {
+    const newSessId = gen.GenRanId(64);
+    await q.queryDb(q.updateSess(sessId, newSessId, gen.setCurrentDateTime()));
+    const workspace = await q.queryDb(q.selectWorkspace(workId));
+    if (!workspace || workspace == "Db Error") {
+      res.send({
+        success: false,
+        msg: "Database Error, <a href='/contact'>contact</a> the site admin.",
+        newSessId: newSessId,
+        workspace: workspace
+      });
+    }
+    //no workspace found in db
+    else if (workspace.length < 1) {
+      res.send({
+        success: false,
+        msg:
+          "No matching workspace found! This should not happen. Please <a href='/contact'>contact</a> a site admin.",
+        newSessId: newSessId,
+        workspace: workspace
+      });
+    }
+    //successful db query
+    else {
+      res.send({
+        success: true,
+        msg: "Retrieved workspace Id: " + workId,
+        newSessId: newSessId,
+        workspace: workspace[0]
+      });
+    }
+  }
 };
 
 //api/availWorkspaces/:sessId
